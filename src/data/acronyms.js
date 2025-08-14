@@ -9,7 +9,7 @@ export const acronyms = [
     { abbreviation: 'BB', fullName: 'Buyers Below', chinese: '买盘' },
     { abbreviation: 'B/E', fullName: 'Breakeven', chinese: '盈亏平衡点' },
     { abbreviation: 'BL', fullName: 'Bull, Bullish', chinese: '多头/看涨' },
-    { abbreviation: 'BLSHS', fullName: 'Buy Low, Sell High, Scalp', chinese: '低吸高抛，短线，剥头皮' },
+    { abbreviation: 'BLSHS', fullName: 'Buy Low, Sell High, Scalp', chinese: '高抛低吸，剥头皮' },
     { abbreviation: 'BLT', fullName: 'Bull Trap', chinese: '多头陷阱' },
     { abbreviation: 'BO', fullName: 'Breakout', chinese: '突破' },
     { abbreviation: 'BOP', fullName: 'Breakout Point', chinese: '突破点' },

@@ -3,14 +3,49 @@
     <!-- 导航栏 -->
     <div class="navbar bg-base-100 shadow-lg">
       <div class="navbar-start">
-        <div class="text-xl font-bold text-primary">PAGame</div>
+        <div class="text-lg md:text-xl font-bold text-primary">PAGame</div>
       </div>
-      <div class="navbar-center">
-        <h1 class="text-2xl font-bold">价格行为学游戏</h1>
+      <div class="navbar-center hidden md:block">
+        <h1 class="text-xl md:text-2xl font-bold">价格行为学游戏</h1>
       </div>
       <div class="navbar-end">
-        <!-- 模式切换 -->
-        <div class="flex gap-2 mr-4">
+        <!-- 移动端菜单 -->
+        <div class="dropdown dropdown-end md:hidden">
+          <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+          </div>
+          <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+            <li><button @click="switchMode('game')" class="flex items-center gap-2">
+                🎮 游戏模式
+              </button></li>
+            <li><button @click="switchMode('study')" class="flex items-center gap-2">
+                📚 学习模式
+              </button></li>
+            <li><button @click="switchMode('stats')" class="flex items-center gap-2">
+                📊 统计
+              </button></li>
+            <li>
+              <div class="divider"></div>
+            </li>
+            <li><button @click="setTheme('light')" class="flex items-center gap-2">
+                ☀️ 浅色主题
+              </button></li>
+            <li><button @click="setTheme('dark')" class="flex items-center gap-2">
+                🌙 深色主题
+              </button></li>
+            <li><button @click="setTheme('cupcake')" class="flex items-center gap-2">
+                🧁 可爱主题
+              </button></li>
+            <li><button @click="setTheme('cyberpunk')" class="flex items-center gap-2">
+                🤖 赛博朋克
+              </button></li>
+          </ul>
+        </div>
+
+        <!-- 桌面端模式切换 -->
+        <div class="hidden md:flex gap-2 mr-4">
           <button @click="switchMode('game')"
             :class="['btn btn-sm', currentMode === 'game' ? 'btn-primary' : 'btn-outline']">
             🎮 游戏模式
@@ -24,8 +59,9 @@
             📊 统计
           </button>
         </div>
-        <!-- 主题切换 -->
-        <div class="dropdown dropdown-end">
+
+        <!-- 桌面端主题切换 -->
+        <div class="dropdown dropdown-end hidden md:block">
           <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -61,8 +97,13 @@
       </div>
     </div>
 
+    <!-- 移动端标题 -->
+    <div class="md:hidden text-center py-4 bg-base-100 border-b">
+      <h1 class="text-xl font-bold">价格行为学游戏</h1>
+    </div>
+
     <!-- 主要内容 -->
-    <div class="container mx-auto px-4 py-8">
+    <div class="container mx-auto px-2 md:px-4 py-4 md:py-8">
       <GameCard v-if="currentMode === 'game'" />
       <StudyMode v-else-if="currentMode === 'study'" />
       <Stats v-else-if="currentMode === 'stats'" />

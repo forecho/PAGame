@@ -23,6 +23,9 @@ jobs:
           cache: 'npm'
           cache-dependency-path: package-lock.json
 
+      - name: Install dependencies
+        run: npm ci
+
       - name: Build project
         run: |
             echo "=== 开始构建 ==="
@@ -45,4 +48,4 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy ./ --project-name=pagame 
+          command: pages deploy dist --project-name=pagame --compatibility-date=2024-01-01 

@@ -1,5 +1,5 @@
 <template>
-  <div class="card bg-base-100 shadow-xl max-w-md mx-auto">
+  <div class="card bg-base-100 shadow-xl max-w-md mx-auto max-h-screen overflow-hidden flex flex-col">
     <div class="card-body text-center">
       <h2 class="card-title text-xl md:text-2xl justify-center text-base-content mb-2">价格行为学缩写记忆</h2>
       <p class="text-sm md:text-base text-base-content/70">记住这些重要的缩写！</p>
@@ -34,7 +34,7 @@
     </div>
 
     <!-- 问题卡片 -->
-    <div v-if="!gameFinished && currentQuestion" class="px-4 md:px-6 mb-4 md:mb-6">
+    <div v-if="!gameFinished && currentQuestion" class="px-4 md:px-6 mb-4 md:mb-6 flex-1 overflow-y-auto">
       <div class="bg-base-200 rounded-box p-3 md:p-4 mb-3 md:mb-4">
         <h3 class="text-xl md:text-2xl font-semibold text-center mb-2">
           {{ currentQuestion.abbreviation }}
@@ -73,26 +73,26 @@
       </div>
 
       <!-- 答案反馈 -->
-      <div v-if="answered" class="mt-2 md:mt-4">
-        <div :class="isCorrect ? 'alert alert-success' : 'alert alert-error'">
+      <div v-if="answered" class="mt-3 md:mt-4 space-y-2">
+        <div :class="isCorrect ? 'alert alert-success' : 'alert alert-error'" class="alert-sm">
           <div class="flex items-center">
             <div class="font-medium text-sm md:text-base">
               {{ isCorrect ? '✓ 正确！' : '✗ 错误！' }}
             </div>
           </div>
         </div>
-        <div class="mt-2 p-2 md:p-4 bg-base-200 rounded-box">
-          <div class="text-xs md:text-sm">
-            <div class="mb-1"><strong>英文全称：</strong>{{ currentQuestion?.fullName }}</div>
+        <div class="p-2 md:p-3 bg-base-200 rounded-box">
+          <div class="text-xs md:text-sm space-y-1">
+            <div><strong>英文全称：</strong>{{ currentQuestion?.fullName }}</div>
             <div><strong>中文释义：</strong>{{ currentQuestion?.chinese }}</div>
           </div>
         </div>
+        
+        <!-- 下一题按钮 -->
+        <button @click="nextQuestion" class="btn btn-primary w-full text-sm md:text-base">
+          下一题
+        </button>
       </div>
-
-      <!-- 下一题按钮 -->
-      <button v-if="answered" @click="nextQuestion" class="btn btn-primary w-full mt-2 md:mt-4 text-sm md:text-base">
-        下一题
-      </button>
     </div>
 
     <!-- 游戏结束 -->

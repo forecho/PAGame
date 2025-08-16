@@ -92,10 +92,7 @@
       </div>
     </div>
 
-    <!-- 移动端标题 -->
-    <div class="md:hidden text-center py-4 bg-base-100 border-b">
-      <h1 class="text-xl font-bold">价格行为学游戏</h1>
-    </div>
+    <!-- 移动端标题已移除 -->
 
     <!-- PWA状态显示 -->
     <PWAStatus />

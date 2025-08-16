@@ -127,10 +127,11 @@
         </div>
       </div>
     </div>
-    
+
     <!-- 答案反馈弹窗 - 固定位置显示 -->
     <div v-if="answered" class="fixed inset-x-4 bottom-4 z-50 max-w-md mx-auto">
-      <div class="bg-base-100 shadow-2xl rounded-box p-4 border-2" :class="isCorrect ? 'border-success' : 'border-error'">
+      <div class="bg-base-100 shadow-2xl rounded-box p-4 border-2"
+        :class="isCorrect ? 'border-success' : 'border-error'">
         <!-- 答案结果 -->
         <div :class="isCorrect ? 'alert alert-success' : 'alert alert-error'" class="mb-3">
           <div class="flex items-center">
@@ -139,7 +140,7 @@
             </div>
           </div>
         </div>
-        
+
         <!-- 答案详情 -->
         <div class="p-3 bg-base-200 rounded-box mb-3">
           <div class="text-xs md:text-sm">
@@ -147,7 +148,7 @@
             <div><strong>中文释义：</strong>{{ currentQuestion?.chinese }}</div>
           </div>
         </div>
-        
+
         <!-- 下一题按钮 -->
         <button @click="nextQuestion" class="btn btn-primary w-full text-sm md:text-base">
           下一题

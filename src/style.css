@@ -7,20 +7,3 @@
     @apply bg-base-200 text-base-content;
   }
 }
-
-/* 确保主题正确加载 */
-[data-theme="light"] {
-  color-scheme: light;
-}
-
-[data-theme="dark"] {
-  color-scheme: dark;
-}
-
-[data-theme="cupcake"] {
-  color-scheme: light;
-}
-
-[data-theme="cyberpunk"] {
-  color-scheme: dark;
-}

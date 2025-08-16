@@ -28,10 +28,13 @@ export default {
     daisyui: {
         themes: [
             "light",
-            "dark",
-            "cupcake",
-            "cyberpunk"
+            "dark"
         ],
-        darkTheme: "dark"
+        darkTheme: "dark",
+        base: true,
+        styled: true,
+        utils: true,
+        prefix: "",
+        logs: false
     }
 }

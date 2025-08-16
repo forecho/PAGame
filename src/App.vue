@@ -36,12 +36,7 @@
             <li><button @click="handleMobileMenuClick('theme-dark')" class="flex items-center gap-2">
                 🌙 深色主题
               </button></li>
-            <li><button @click="handleMobileMenuClick('theme-cupcake')" class="flex items-center gap-2">
-                🧁 可爱主题
-              </button></li>
-            <li><button @click="handleMobileMenuClick('theme-cyberpunk')" class="flex items-center gap-2">
-                🤖 赛博朋克
-              </button></li>
+
           </ul>
         </div>
 
@@ -85,14 +80,7 @@
                 </svg>
                 深色主题
               </button></li>
-            <li><button @click="setTheme('cupcake')" class="flex items-center gap-2">
-                🧁
-                可爱主题
-              </button></li>
-            <li><button @click="setTheme('cyberpunk')" class="flex items-center gap-2">
-                🤖
-                赛博朋克
-              </button></li>
+
           </ul>
         </div>
       </div>
@@ -142,8 +130,16 @@ export default {
     const mobileMenuOpen = ref(false) // 移动端菜单状态
 
     const setTheme = (theme) => {
+      console.log('Setting theme to:', theme)
       document.documentElement.setAttribute('data-theme', theme)
       localStorage.setItem('theme', theme)
+
+      // 调试信息：检查主题是否正确应用
+      setTimeout(() => {
+        const currentTheme = document.documentElement.getAttribute('data-theme')
+        console.log('Current theme attribute:', currentTheme)
+        console.log('CSS variables:', getComputedStyle(document.documentElement).getPropertyValue('--color-primary'))
+      }, 100)
     }
 
     const switchMode = (mode) => {

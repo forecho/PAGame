@@ -31,6 +31,7 @@ export default {
             "dark",
             "cupcake",
             "cyberpunk"
-        ]
+        ],
+        darkTheme: "dark"
     }
 }

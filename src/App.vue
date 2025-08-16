@@ -11,34 +11,35 @@
       <div class="navbar-end">
         <!-- 移动端菜单 -->
         <div class="dropdown dropdown-end md:hidden">
-          <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
+          <div tabindex="0" role="button" class="btn btn-ghost btn-circle" @click="toggleMobileMenu">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
             </svg>
           </div>
-          <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
-            <li><button @click="switchMode('game')" class="flex items-center gap-2">
+          <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+            :class="{ 'dropdown-open': mobileMenuOpen }">
+            <li><button @click="handleMobileMenuClick('game')" class="flex items-center gap-2">
                 🎮 游戏模式
               </button></li>
-            <li><button @click="switchMode('study')" class="flex items-center gap-2">
+            <li><button @click="handleMobileMenuClick('study')" class="flex items-center gap-2">
                 📚 学习模式
               </button></li>
-            <li><button @click="switchMode('stats')" class="flex items-center gap-2">
+            <li><button @click="handleMobileMenuClick('stats')" class="flex items-center gap-2">
                 📊 统计
               </button></li>
             <li>
               <div class="divider"></div>
             </li>
-            <li><button @click="setTheme('light')" class="flex items-center gap-2">
+            <li><button @click="handleMobileMenuClick('theme-light')" class="flex items-center gap-2">
                 ☀️ 浅色主题
               </button></li>
-            <li><button @click="setTheme('dark')" class="flex items-center gap-2">
+            <li><button @click="handleMobileMenuClick('theme-dark')" class="flex items-center gap-2">
                 🌙 深色主题
               </button></li>
-            <li><button @click="setTheme('cupcake')" class="flex items-center gap-2">
+            <li><button @click="handleMobileMenuClick('theme-cupcake')" class="flex items-center gap-2">
                 🧁 可爱主题
               </button></li>
-            <li><button @click="setTheme('cyberpunk')" class="flex items-center gap-2">
+            <li><button @click="handleMobileMenuClick('theme-cyberpunk')" class="flex items-center gap-2">
                 🤖 赛博朋克
               </button></li>
           </ul>
@@ -138,6 +139,7 @@ export default {
   },
   setup() {
     const currentMode = ref('game') // 'game', 'study', 或 'stats'
+    const mobileMenuOpen = ref(false) // 移动端菜单状态
 
     const setTheme = (theme) => {
       document.documentElement.setAttribute('data-theme', theme)
@@ -146,6 +148,21 @@ export default {
 
     const switchMode = (mode) => {
       currentMode.value = mode
+    }
+
+    const toggleMobileMenu = () => {
+      mobileMenuOpen.value = !mobileMenuOpen.value
+    }
+
+    const handleMobileMenuClick = (action) => {
+      if (action.startsWith('theme-')) {
+        const theme = action.replace('theme-', '')
+        setTheme(theme)
+      } else {
+        switchMode(action)
+      }
+      // 点击后关闭菜单
+      mobileMenuOpen.value = false
     }
 
     onMounted(() => {
@@ -157,7 +174,10 @@ export default {
     return {
       currentMode,
       setTheme,
-      switchMode
+      switchMode,
+      mobileMenuOpen,
+      toggleMobileMenu,
+      handleMobileMenuClick
     }
   }
 }

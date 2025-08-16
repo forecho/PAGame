@@ -73,7 +73,7 @@
       </div>
 
       <!-- 答案反馈 -->
-      <div v-if="answered" class="mt-3 md:mt-4">
+      <div v-if="answered" class="mt-2 md:mt-4">
         <div :class="isCorrect ? 'alert alert-success' : 'alert alert-error'">
           <div class="flex items-center">
             <div class="font-medium text-sm md:text-base">
@@ -81,16 +81,16 @@
             </div>
           </div>
         </div>
-        <div class="mt-2 p-3 md:p-4 bg-base-200 rounded-box">
+        <div class="mt-2 p-2 md:p-4 bg-base-200 rounded-box">
           <div class="text-xs md:text-sm">
-            <div><strong>英文全称：</strong>{{ currentQuestion?.fullName }}</div>
+            <div class="mb-1"><strong>英文全称：</strong>{{ currentQuestion?.fullName }}</div>
             <div><strong>中文释义：</strong>{{ currentQuestion?.chinese }}</div>
           </div>
         </div>
       </div>
 
       <!-- 下一题按钮 -->
-      <button v-if="answered" @click="nextQuestion" class="btn btn-primary w-full mt-3 md:mt-4 text-sm md:text-base">
+      <button v-if="answered" @click="nextQuestion" class="btn btn-primary w-full mt-2 md:mt-4 text-sm md:text-base">
         下一题
       </button>
     </div>
@@ -151,7 +151,7 @@
 </template>
 
 <script>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { acronyms } from '../data/acronyms.js'
 
 export default {
@@ -283,24 +283,36 @@ export default {
 
       // 添加键盘快捷键支持
       const handleKeyPress = (event) => {
-        if (gameFinished.value || answered.value) return
+        // 如果游戏结束，不处理键盘事件
+        if (gameFinished.value) return
 
-        const key = event.key.toLowerCase()
-        if (key >= '1' && key <= '4') {
+        const key = event.key
+
+        // 数字键 1-4 选择答案
+        if (key >= '1' && key <= '4' && !answered.value) {
           const optionIndex = parseInt(key) - 1
           if (currentOptions.value[optionIndex]) {
             checkAnswer(currentOptions.value[optionIndex])
           }
-        } else if (key === 'enter' && answered.value) {
+        }
+
+        // Enter 键进入下一题（只有在已回答后才能使用）
+        if (key === 'Enter' && answered.value) {
           nextQuestion()
         }
       }
 
-      window.addEventListener('keypress', handleKeyPress)
+      window.addEventListener('keydown', handleKeyPress)
 
-      // 清理事件监听器
-      return () => {
-        window.removeEventListener('keypress', handleKeyPress)
+      // 保存事件监听器引用以便清理
+      window._paGameKeyHandler = handleKeyPress
+    })
+
+    onUnmounted(() => {
+      // 清理键盘事件监听器
+      if (window._paGameKeyHandler) {
+        window.removeEventListener('keydown', window._paGameKeyHandler)
+        delete window._paGameKeyHandler
       }
     })
 

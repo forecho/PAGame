@@ -17,25 +17,7 @@
             </div>
         </div>
 
-        <!-- PWA安装状态 -->
-        <div v-if="showInstallButton" class="alert alert-info alert-sm mb-2">
-            <div class="flex items-center justify-between w-full">
-                <div class="flex items-center gap-2">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z">
-                        </path>
-                    </svg>
-                    <span class="text-xs">点击安装到主屏幕</span>
-                </div>
-                <div class="flex items-center gap-2">
-                    <button @click="installPWA" class="btn btn-xs btn-primary">安装</button>
-                    <button @click="dismissInstallPrompt" class="btn btn-xs btn-ghost text-base-content/70">
-                        ✕
-                    </button>
-                </div>
-            </div>
-        </div>
+
 
         <!-- 已安装状态 -->
         <div v-if="isInstalled" class="alert alert-success alert-sm mb-2">

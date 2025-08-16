@@ -10,34 +10,40 @@
       </div>
       <div class="navbar-end">
         <!-- 移动端菜单 -->
-        <div class="dropdown dropdown-end md:hidden">
+        <div class="relative md:hidden">
           <div tabindex="0" role="button" class="btn btn-ghost btn-circle" @click="toggleMobileMenu">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
             </svg>
           </div>
-          <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
-            :class="{ 'dropdown-open': mobileMenuOpen }">
-            <li><button @click="handleMobileMenuClick('game')" class="flex items-center gap-2">
-                🎮 游戏模式
-              </button></li>
-            <li><button @click="handleMobileMenuClick('study')" class="flex items-center gap-2">
-                📚 学习模式
-              </button></li>
-            <li><button @click="handleMobileMenuClick('stats')" class="flex items-center gap-2">
-                📊 统计
-              </button></li>
-            <li>
-              <div class="divider"></div>
-            </li>
-            <li><button @click="handleMobileMenuClick('theme-light')" class="flex items-center gap-2">
-                ☀️ 浅色主题
-              </button></li>
-            <li><button @click="handleMobileMenuClick('theme-dark')" class="flex items-center gap-2">
-                🌙 深色主题
-              </button></li>
 
-          </ul>
+          <!-- 菜单背景遮罩 -->
+          <div v-if="mobileMenuOpen" class="fixed inset-0 z-40 bg-black bg-opacity-25" @click="closeMobileMenu"></div>
+
+          <!-- 菜单内容 -->
+          <div v-if="mobileMenuOpen"
+            class="absolute right-0 top-full mt-2 z-50 menu p-2 shadow bg-base-100 rounded-box w-52">
+            <ul>
+              <li><button @click="handleMobileMenuClick('game')" class="flex items-center gap-2 w-full">
+                  🎮 游戏模式
+                </button></li>
+              <li><button @click="handleMobileMenuClick('study')" class="flex items-center gap-2 w-full">
+                  📚 学习模式
+                </button></li>
+              <li><button @click="handleMobileMenuClick('stats')" class="flex items-center gap-2 w-full">
+                  📊 统计
+                </button></li>
+              <li>
+                <div class="divider"></div>
+              </li>
+              <li><button @click="handleMobileMenuClick('theme-light')" class="flex items-center gap-2 w-full">
+                  ☀️ 浅色主题
+                </button></li>
+              <li><button @click="handleMobileMenuClick('theme-dark')" class="flex items-center gap-2 w-full">
+                  🌙 深色主题
+                </button></li>
+            </ul>
+          </div>
         </div>
 
         <!-- 桌面端模式切换 -->
@@ -150,6 +156,10 @@ export default {
       mobileMenuOpen.value = !mobileMenuOpen.value
     }
 
+    const closeMobileMenu = () => {
+      mobileMenuOpen.value = false
+    }
+
     const handleMobileMenuClick = (action) => {
       if (action.startsWith('theme-')) {
         const theme = action.replace('theme-', '')
@@ -173,6 +183,7 @@ export default {
       switchMode,
       mobileMenuOpen,
       toggleMobileMenu,
+      closeMobileMenu,
       handleMobileMenuClick
     }
   }

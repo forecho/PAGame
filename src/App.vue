@@ -102,6 +102,9 @@
       <h1 class="text-xl font-bold">价格行为学游戏</h1>
     </div>
 
+    <!-- PWA状态显示 -->
+    <PWAStatus />
+
     <!-- 主要内容 -->
     <div class="container mx-auto px-2 md:px-4 py-4 md:py-8">
       <GameCard v-if="currentMode === 'game'" />
@@ -123,13 +126,15 @@ import { onMounted, ref } from 'vue'
 import GameCard from './components/GameCard.vue'
 import StudyMode from './components/StudyMode.vue'
 import Stats from './components/Stats.vue'
+import PWAStatus from './components/PWAStatus.vue'
 
 export default {
   name: 'App',
   components: {
     GameCard,
     StudyMode,
-    Stats
+    Stats,
+    PWAStatus
   },
   setup() {
     const currentMode = ref('game') // 'game', 'study', 或 'stats'

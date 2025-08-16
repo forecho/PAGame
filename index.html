@@ -5,9 +5,105 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>价格行为学缩写记忆游戏</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="通过游戏化方式学习价格行为学缩写，提高交易技能" />
+    <meta name="keywords" content="价格行为学,缩写,记忆游戏,交易技能,PA" />
+    <meta name="author" content="PAGame Team" />
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+    
+    <!-- PWA Icons -->
+    <link rel="apple-touch-icon" href="/icon.svg" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    
+    <!-- PWA Theme Colors -->
+    <meta name="theme-color" content="#3b82f6" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="PAGame" />
+    
+    <!-- PWA Splash Screen -->
+    <meta name="msapplication-TileColor" content="#3b82f6" />
+    <meta name="msapplication-TileImage" content="/icon.svg" />
+    
+    <!-- PWA Preload -->
+    <link rel="preload" href="/sw.js" as="script" />
   </head>
   <body>
     <div id="app"></div>
+    
+    <!-- PWA Install Prompt -->
+    <div id="pwa-install-prompt" class="fixed bottom-4 left-4 right-4 bg-blue-600 text-white p-4 rounded-lg shadow-lg hidden">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="font-semibold">安装PAGame</h3>
+          <p class="text-sm opacity-90">添加到主屏幕，获得更好的体验</p>
+        </div>
+        <div class="flex gap-2">
+          <button id="pwa-install-btn" class="bg-white text-blue-600 px-4 py-2 rounded font-medium">
+            安装
+          </button>
+          <button id="pwa-dismiss-btn" class="text-white opacity-70 px-2 py-2">
+            ✕
+          </button>
+        </div>
+      </div>
+    </div>
+    
     <script type="module" src="/src/main.js"></script>
+    
+    <!-- PWA Service Worker Registration -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then((registration) => {
+              console.log('SW registered: ', registration);
+            })
+            .catch((registrationError) => {
+              console.log('SW registration failed: ', registrationError);
+            });
+        });
+      }
+      
+      // PWA Install Prompt
+      let deferredPrompt;
+      const installPrompt = document.getElementById('pwa-install-prompt');
+      const installBtn = document.getElementById('pwa-install-btn');
+      const dismissBtn = document.getElementById('pwa-dismiss-btn');
+      
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        installPrompt.classList.remove('hidden');
+      });
+      
+      installBtn.addEventListener('click', async () => {
+        if (deferredPrompt) {
+          deferredPrompt.prompt();
+          const { outcome } = await deferredPrompt.userChoice;
+          if (outcome === 'accepted') {
+            console.log('User accepted the install prompt');
+          } else {
+            console.log('User dismissed the install prompt');
+          }
+          deferredPrompt = null;
+          installPrompt.classList.add('hidden');
+        }
+      });
+      
+      dismissBtn.addEventListener('click', () => {
+        installPrompt.classList.add('hidden');
+      });
+      
+      // 检查是否已安装
+      window.addEventListener('appinstalled', () => {
+        installPrompt.classList.add('hidden');
+        deferredPrompt = null;
+        console.log('PWA was installed');
+      });
+    </script>
   </body>
 </html>

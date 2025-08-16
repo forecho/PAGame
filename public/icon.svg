@@ -1,0 +1,32 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" rx="128" fill="#3b82f6"/>
+  
+  <!-- 游戏控制器图标 -->
+  <g fill="white">
+    <!-- 主体 -->
+    <rect x="128" y="192" width="256" height="128" rx="24" fill="white"/>
+    
+    <!-- 按钮 -->
+    <circle cx="200" cy="256" r="24" fill="#3b82f6"/>
+    <circle cx="312" cy="256" r="24" fill="#3b82f6"/>
+    
+    <!-- 方向键 -->
+    <rect x="240" y="224" width="32" height="32" rx="8" fill="#3b82f6"/>
+    <rect x="256" y="208" width="32" height="32" rx="8" fill="#3b82f6"/>
+    <rect x="272" y="224" width="32" height="32" rx="8" fill="#3b82f6"/>
+    <rect x="256" y="240" width="32" height="32" rx="8" fill="#3b82f6"/>
+    
+    <!-- 屏幕 -->
+    <rect x="144" y="200" width="224" height="112" rx="16" fill="#1e40af"/>
+    <rect x="160" y="216" width="192" height="80" rx="8" fill="#dbeafe"/>
+    
+    <!-- 文字 PA -->
+    <text x="256" y="260" text-anchor="middle" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="#1e40af">PA</text>
+  </g>
+  
+  <!-- 装饰性元素 -->
+  <circle cx="128" cy="128" r="16" fill="#60a5fa" opacity="0.6"/>
+  <circle cx="384" cy="128" r="16" fill="#60a5fa" opacity="0.6"/>
+  <circle cx="128" cy="384" r="16" fill="#60a5fa" opacity="0.6"/>
+  <circle cx="384" cy="384" r="16" fill="#60a5fa" opacity="0.6"/>
+</svg>

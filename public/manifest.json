@@ -1,0 +1,47 @@
+{
+  "name": "价格行为学缩写记忆游戏",
+  "short_name": "PAGame",
+  "description": "通过游戏化方式学习价格行为学缩写，提高交易技能",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3b82f6",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "zh-CN",
+  "categories": ["education", "games", "productivity"],
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "开始游戏",
+      "short_name": "游戏",
+      "description": "快速开始新的游戏",
+      "url": "/?mode=game",
+      "icons": [
+        {
+          "src": "/icon-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "学习模式",
+      "short_name": "学习",
+      "description": "浏览所有缩写",
+      "url": "/?mode=study",
+      "icons": [
+        {
+          "src": "/icon-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
+}

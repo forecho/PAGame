@@ -195,9 +195,29 @@ export default {
       if (!currentQuestion.value) return []
 
       const correctAnswer = currentQuestion.value
-      const otherAcronyms = acronyms.filter(a => a.abbreviation !== correctAnswer.abbreviation)
+      // 过滤掉缩写相同的项和中文释义相同的项，避免重复答案
+      const otherAcronyms = acronyms.filter(a => 
+        a.abbreviation !== correctAnswer.abbreviation && 
+        a.chinese !== correctAnswer.chinese
+      )
 
-      // 随机选择3个干扰项
+      // 确保有足够的干扰项
+      if (otherAcronyms.length < 3) {
+        // 如果过滤后的选项不足3个，则只过滤缩写相同的项
+        const fallbackOptions = acronyms.filter(a => 
+          a.abbreviation !== correctAnswer.abbreviation
+        )
+        
+        // 随机选择3个干扰项
+        const shuffled = fallbackOptions.sort(() => 0.5 - Math.random())
+        const distractors = shuffled.slice(0, 3)
+        
+        // 合并选项并打乱顺序
+        const allOptions = [correctAnswer, ...distractors]
+        return allOptions.sort(() => 0.5 - Math.random())
+      }
+      
+      // 正常情况：随机选择3个干扰项
       const shuffled = otherAcronyms.sort(() => 0.5 - Math.random())
       const distractors = shuffled.slice(0, 3)
 
@@ -284,7 +304,12 @@ export default {
 
     // 生成问题（根据难度选择题目数量）
     const generateQuestions = () => {
-      const shuffled = [...acronyms].sort(() => 0.5 - Math.random())
+      // 确保没有重复的问题
+      const uniqueAcronyms = [...new Map(acronyms.map(item => 
+        [item.abbreviation, item]
+      )).values()]
+      
+      const shuffled = [...uniqueAcronyms].sort(() => 0.5 - Math.random())
       let questionCount = 20 // 默认中等难度
 
       switch (difficulty.value) {
@@ -298,7 +323,10 @@ export default {
           questionCount = 20
       }
 
-      questions.value = shuffled.slice(0, questionCount)
+      // 确保问题数量不超过可用的唯一缩写数量
+      const actualCount = Math.min(questionCount, uniqueAcronyms.length)
+      
+      questions.value = shuffled.slice(0, actualCount)
       totalQuestions.value = questions.value.length
       gameStartTime.value = Date.now() // 记录游戏开始时间
     }

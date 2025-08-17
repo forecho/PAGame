@@ -232,6 +232,8 @@ export default {
         selectedAnswer.value = null
       } else {
         gameFinished.value = true
+        answered.value = false // 重置答案状态，确保答案窗口可以关闭
+        selectedAnswer.value = null
         saveGameRecord() // 保存游戏记录
       }
     }

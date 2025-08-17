@@ -35,6 +35,11 @@
             :class="difficulty === 'hard' ? 'btn-error' : 'btn-outline btn-error'">
             困难
           </button>
+          <button @click="changeDifficulty('all')" 
+            class="btn btn-xs" 
+            :class="difficulty === 'all' ? 'btn-primary' : 'btn-outline btn-primary'">
+            全部
+          </button>
         </div>
       </div>
 
@@ -133,6 +138,10 @@
               :class="['btn btn-sm text-xs md:text-sm', difficulty === 'hard' ? 'btn-error' : 'btn-outline']">
               困难 (30题)
             </button>
+            <button @click="changeDifficulty('all')"
+              :class="['btn btn-sm text-xs md:text-sm', difficulty === 'all' ? 'btn-primary' : 'btn-outline']">
+              全部 ({{ acronymsData.length }}题)
+            </button>
           </div>
         </div>
       </div>
@@ -186,6 +195,7 @@ export default {
     const isReviewMode = ref(false) // 是否为复习模式
     const difficulty = ref('medium') // 难度：easy(10题), medium(20题), hard(30题)
     const gameStartTime = ref(0) // 游戏开始时间
+    const acronymsData = ref(acronyms) // 将 acronyms 数据转为响应式变量，供模板使用
 
     // 获取当前问题
     const currentQuestion = computed(() => questions.value[currentIndex.value])
@@ -291,7 +301,14 @@ export default {
       
       // 如果游戏正在进行中，询问用户是否确定切换难度
       if (!gameFinished.value && currentIndex.value > 0) {
-        if (confirm(`确定要切换到${newDifficulty === 'easy' ? '简单' : newDifficulty === 'medium' ? '中等' : '困难'}难度吗？当前进度将会丢失。`)) {
+        const difficultyText = {
+          'easy': '简单',
+          'medium': '中等',
+          'hard': '困难',
+          'all': '全部'
+        }[newDifficulty] || '未知';
+        
+        if (confirm(`确定要切换到${difficultyText}难度吗？当前进度将会丢失。`)) {
           difficulty.value = newDifficulty
           restartGame()
         }
@@ -319,6 +336,9 @@ export default {
         case 'hard':
           questionCount = 30
           break
+        case 'all':
+          questionCount = uniqueAcronyms.length // 使用所有可用的数据
+          break
         default:
           questionCount = 20
       }
@@ -335,7 +355,8 @@ export default {
     const isCorrect = computed(() => {
       return selectedAnswer.value?.fullName === currentQuestion.value?.fullName
     })
-
+    
+    // 生命周期钩子
     onMounted(() => {
       // 从本地存储恢复数据
       loadFromStorage()
@@ -375,7 +396,7 @@ export default {
         delete window._paGameKeyHandler
       }
     })
-
+    
     // 保存到本地存储
     const saveToStorage = () => {
       const data = {
@@ -437,6 +458,7 @@ export default {
       wrongAnswers,
       isReviewMode,
       difficulty,
+      acronymsData, // 添加 acronymsData 以修复 TypeError
       checkAnswer,
       nextQuestion,
       restartGame,

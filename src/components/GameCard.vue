@@ -16,15 +16,25 @@
         </div>
       </div>
 
-      <!-- 难度显示 -->
+      <!-- 难度选择 -->
       <div class="flex items-center gap-2 mb-2">
         <span class="text-xs text-base-content/50">难度:</span>
-        <div class="badge badge-sm md:badge-md" :class="{
-          'badge-success': difficulty === 'easy',
-          'badge-warning': difficulty === 'medium',
-          'badge-error': difficulty === 'hard'
-        }">
-          {{ difficulty === 'easy' ? '简单' : difficulty === 'medium' ? '中等' : '困难' }}
+        <div class="flex gap-1">
+          <button @click="changeDifficulty('easy')" 
+            class="btn btn-xs" 
+            :class="difficulty === 'easy' ? 'btn-success' : 'btn-outline btn-success'">
+            简单
+          </button>
+          <button @click="changeDifficulty('medium')" 
+            class="btn btn-xs" 
+            :class="difficulty === 'medium' ? 'btn-warning' : 'btn-outline btn-warning'">
+            中等
+          </button>
+          <button @click="changeDifficulty('hard')" 
+            class="btn btn-xs" 
+            :class="difficulty === 'hard' ? 'btn-error' : 'btn-outline btn-error'">
+            困难
+          </button>
         </div>
       </div>
 
@@ -254,8 +264,20 @@ export default {
 
     // 改变难度
     const changeDifficulty = (newDifficulty) => {
-      difficulty.value = newDifficulty
-      restartGame()
+      // 如果难度没有变化，不做任何操作
+      if (difficulty.value === newDifficulty) return
+      
+      // 如果游戏正在进行中，询问用户是否确定切换难度
+      if (!gameFinished.value && currentIndex.value > 0) {
+        if (confirm(`确定要切换到${newDifficulty === 'easy' ? '简单' : newDifficulty === 'medium' ? '中等' : '困难'}难度吗？当前进度将会丢失。`)) {
+          difficulty.value = newDifficulty
+          restartGame()
+        }
+      } else {
+        // 游戏未开始或已结束，直接切换难度
+        difficulty.value = newDifficulty
+        restartGame()
+      }
     }
 
     // 生成问题（根据难度选择题目数量）

@@ -21,11 +21,18 @@
 
         <!-- 已安装状态 -->
         <div v-if="isInstalled" class="alert alert-success alert-sm mb-2">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
-                </path>
-            </svg>
-            <span class="text-xs">已安装到主屏幕</span>
+            <div class="flex items-center justify-between w-full">
+                <div class="flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
+                        </path>
+                    </svg>
+                    <span class="text-xs">已安装到主屏幕</span>
+                </div>
+                <button @click="dismissInstalledAlert" class="btn btn-xs btn-ghost text-success/70">
+                    ✕
+                </button>
+            </div>
         </div>
     </div>
 </template>
@@ -79,10 +86,24 @@ export default {
             isOffline.value = false
         }
 
+        // 关闭已安装提示
+        const dismissInstalledAlert = () => {
+            isInstalled.value = false
+            // 记住用户的选择，避免再次显示
+            localStorage.setItem('pwa-installed-dismissed', 'true')
+        }
+
         onMounted(() => {
             // 检查初始状态
             checkOnlineStatus()
-            checkInstallStatus()
+            
+            // 检查是否已经关闭过安装提示
+            const installedDismissed = localStorage.getItem('pwa-installed-dismissed')
+            if (installedDismissed === 'true') {
+                isInstalled.value = false
+            } else {
+                checkInstallStatus()
+            }
 
             // 监听在线状态变化
             window.addEventListener('online', checkOnlineStatus)
@@ -119,7 +140,8 @@ export default {
             isInstalled,
             installPWA,
             dismissInstallPrompt,
-            dismissOfflineAlert
+            dismissOfflineAlert,
+            dismissInstalledAlert
         }
     }
 }

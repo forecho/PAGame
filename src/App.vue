@@ -36,11 +36,8 @@
               <li>
                 <div class="divider"></div>
               </li>
-              <li><button @click="handleMobileMenuClick('theme-light')" class="flex items-center gap-2 w-full">
-                  ☀️ 浅色主题
-                </button></li>
-              <li><button @click="handleMobileMenuClick('theme-dark')" class="flex items-center gap-2 w-full">
-                  🌙 深色主题
+              <li><button @click="handleMobileMenuClick('theme-toggle')" class="flex items-center gap-2 w-full">
+                  {{ currentTheme === 'light' ? '🌙 切换到深色主题' : '☀️ 切换到浅色主题' }}
                 </button></li>
             </ul>
           </div>
@@ -63,31 +60,21 @@
         </div>
 
         <!-- 桌面端主题切换 -->
-        <div class="dropdown dropdown-end hidden md:block">
-          <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="hidden md:block">
+          <button @click="toggleTheme" class="btn btn-ghost btn-circle" aria-label="切换主题">
+            <!-- 根据当前主题显示不同图标 -->
+            <svg v-if="currentTheme === 'dark'" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <!-- 太阳图标 (浅色模式) -->
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z">
+              </path>
+            </svg>
+            <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <!-- 月亮图标 (深色模式) -->
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
             </svg>
-          </div>
-          <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
-            <li><button @click="setTheme('light')" class="flex items-center gap-2">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z">
-                  </path>
-                </svg>
-                浅色主题
-              </button></li>
-            <li><button @click="setTheme('dark')" class="flex items-center gap-2">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
-                </svg>
-                深色主题
-              </button></li>
-
-          </ul>
+          </button>
         </div>
       </div>
     </div>
@@ -131,18 +118,26 @@ export default {
   setup() {
     const currentMode = ref('game') // 'game', 'study', 或 'stats'
     const mobileMenuOpen = ref(false) // 移动端菜单状态
+    const currentTheme = ref('light') // 当前主题
 
     const setTheme = (theme) => {
       console.log('Setting theme to:', theme)
       document.documentElement.setAttribute('data-theme', theme)
       localStorage.setItem('theme', theme)
+      currentTheme.value = theme
 
       // 调试信息：检查主题是否正确应用
       setTimeout(() => {
-        const currentTheme = document.documentElement.getAttribute('data-theme')
-        console.log('Current theme attribute:', currentTheme)
+        const docTheme = document.documentElement.getAttribute('data-theme')
+        console.log('Current theme attribute:', docTheme)
         console.log('CSS variables:', getComputedStyle(document.documentElement).getPropertyValue('--color-primary'))
       }, 100)
+    }
+    
+    // 切换主题（直接在明暗主题间切换）
+    const toggleTheme = () => {
+      const newTheme = currentTheme.value === 'light' ? 'dark' : 'light'
+      setTheme(newTheme)
     }
 
     const switchMode = (mode) => {
@@ -158,7 +153,11 @@ export default {
     }
 
     const handleMobileMenuClick = (action) => {
-      if (action.startsWith('theme-')) {
+      if (action === 'theme-toggle') {
+        // 直接切换主题
+        toggleTheme()
+      } else if (action.startsWith('theme-')) {
+        // 兼容旧代码
         const theme = action.replace('theme-', '')
         setTheme(theme)
       } else {
@@ -171,12 +170,15 @@ export default {
     onMounted(() => {
       // 从本地存储恢复主题设置
       const savedTheme = localStorage.getItem('theme') || 'light'
+      currentTheme.value = savedTheme // 确保 currentTheme 与实际主题一致
       setTheme(savedTheme)
     })
 
     return {
       currentMode,
+      currentTheme,
       setTheme,
+      toggleTheme,
       switchMode,
       mobileMenuOpen,
       toggleMobileMenu,

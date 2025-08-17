@@ -33,6 +33,9 @@
               <li><button @click="handleMobileMenuClick('stats')" class="flex items-center gap-2 w-full">
                   📊 统计
                 </button></li>
+              <li><button @click="handleMobileMenuClick('donation')" class="flex items-center gap-2 w-full">
+                  ☕ 打赏支持
+                </button></li>
               <li>
                 <div class="divider"></div>
               </li>
@@ -56,6 +59,10 @@
           <button @click="switchMode('stats')"
             :class="['btn btn-sm', currentMode === 'stats' ? 'btn-primary' : 'btn-outline']">
             📊 统计
+          </button>
+          <button @click="switchMode('donation')"
+            :class="['btn btn-sm', currentMode === 'donation' ? 'btn-primary' : 'btn-outline']">
+            ☕ 打赏支持
           </button>
         </div>
 
@@ -89,12 +96,20 @@
       <GameCard v-if="currentMode === 'game'" />
       <StudyMode v-else-if="currentMode === 'study'" />
       <Stats v-else-if="currentMode === 'stats'" />
+      <Donation v-else-if="currentMode === 'donation'" />
     </div>
 
     <!-- 页脚 -->
     <footer class="footer footer-center p-4 bg-base-300 text-base-content">
-      <div>
-        <p>价格行为学缩写记忆游戏 - 让学习变得有趣！</p>
+      <div class="grid grid-flow-col gap-4">
+        <a href="https://github.com/forecho/PAGame" target="_blank" rel="noopener noreferrer"
+          class="link link-hover flex items-center gap-1">
+          ⭐ GitHub
+        </a>
+        <span class="text-base-content/60">|</span>
+        <span>价格行为学缩写记忆游戏</span>
+        <span class="text-base-content/60">|</span>
+        <span>让学习变得有趣！</span>
       </div>
     </footer>
   </div>
@@ -105,6 +120,7 @@ import { onMounted, ref } from 'vue'
 import GameCard from './components/GameCard.vue'
 import StudyMode from './components/StudyMode.vue'
 import Stats from './components/Stats.vue'
+import Donation from './components/Donation.vue'
 import PWAStatus from './components/PWAStatus.vue'
 
 export default {
@@ -113,10 +129,11 @@ export default {
     GameCard,
     StudyMode,
     Stats,
+    Donation,
     PWAStatus
   },
   setup() {
-    const currentMode = ref('game') // 'game', 'study', 或 'stats'
+    const currentMode = ref('game') // 'game', 'study', 'stats', 或 'donation'
     const mobileMenuOpen = ref(false) // 移动端菜单状态
     const currentTheme = ref('light') // 当前主题
 
@@ -133,7 +150,7 @@ export default {
         console.log('CSS variables:', getComputedStyle(document.documentElement).getPropertyValue('--color-primary'))
       }, 100)
     }
-    
+
     // 切换主题（直接在明暗主题间切换）
     const toggleTheme = () => {
       const newTheme = currentTheme.value === 'light' ? 'dark' : 'light'
